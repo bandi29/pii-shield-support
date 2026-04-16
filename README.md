@@ -1,57 +1,54 @@
-# PII Shield - User Documentation
+🚀 How to Access the App
+Once installed from the Atlassian Marketplace, PII Shield integrates seamlessly into your Jira interface:
 
-**Developed by Sentient Apps**
+Open any Jira Issue.
 
-PII Shield is a privacy-first security tool for Jira that automatically detects and highlights Personally Identifiable Information (PII) within issue comments. Our "Zero-Egress" architecture ensures that your sensitive data never leaves the Atlassian Forge environment.
+View the Sidebar: Locate the "PII Security Status" panel in the right-hand sidebar.
 
----
+Real-Time Monitoring: The app automatically monitors the Comments and Activity sections of the issue as they are updated.
 
-## How to Access the App
+🛠️ How it Works
+PII Shield scans text in real-time to identify sensitive patterns, including:
 
-Once installed, PII Shield integrates directly into your Jira Issue view.
+Email Addresses (e.g., name@company.com)
 
-1. **Open any Jira Issue.**
-2. **Look at the Right Sidebar:** You will see a panel titled **"PII Security Status"**.
-3. **Activity Feed:** The app automatically monitors the **Comments** section of the issue.
+Phone Numbers (International and local formats)
 
----
+Credit Card Patterns
 
-## How the App Works
+Technical Secrets (API Keys, Tokens, and Secret Keys)
 
-PII Shield scans comments in real-time to identify sensitive patterns, including:
+Security Metrics
+Redactions Today: Located in the sidebar, this counter displays a running total of all security actions taken across your entire Jira instance within a 24-hour window.
 
-* **Email Addresses** (e.g., name@example.com)
-* **Phone Numbers** (International and Local formats)
-* **Credit Card Patterns**
-* **API Keys and Tokens**
+Instance-Wide Protection: This metric allows administrators to monitor real-time security health and demonstrate compliance with data privacy standards (GDPR, CCPA).
 
-### **Detection & Reporting**
+🔒 Security Policy & Data Privacy
+PII Shield is built with a "Zero-Egress" architecture, meaning your sensitive data never leaves the Atlassian environment.
 
-* **Visual Indicators:** When PII is detected, the app highlights the text or provides a warning notification to the administrator.
-* **Cumulative Tracking:** The "Redactions Today" badge in the sidebar displays a running total of all security actions taken by the app across your Jira instance to help you track compliance.
+1. Atlassian Forge Infrastructure
+The app is built exclusively on Atlassian Forge. It operates within a multi-tenant, serverless environment managed and secured by Atlassian. By utilizing Forge, PII Shield inherits Atlassian’s enterprise-grade security controls and data isolation.
 
----
+2. Zero-Egress Architecture
+No External Transfer: No end-user data (issue content, comments, or metadata) is ever transmitted to or stored on external servers.
 
-## Understanding Security Metrics
+Local Processing: All detection logic runs within the Atlassian Forge FaaS (Function as a Service) environment.
 
-**Redactions Today:** This counter represents the total number of sensitive data items (PII) identified and secured by PII Shield across your entire Jira instance within the current 24-hour window. This helps administrators monitor real-time security health and demonstrate compliance with data privacy standards.
+3. Data Storage & Logging
+Minimal Storage: We utilize Forge Storage strictly for operational counters (e.g., "Redactions Today").
 
----
+No PII Logging: We do not log the actual contents of your Jira issues or the PII detected. Once a scan is complete, the data is flushed from memory.
 
-## Privacy & Security
+4. Vulnerability Management
+We are committed to the security of our tools. If you discover a potential vulnerability, please report it via our Issue Tracker or contact us directly at support@sentientapps.io.
 
-As a Sentient Apps "Zero-Egress" solution:
+📞 Support & Feedback
+We are here to help you maintain a secure Jira environment.
 
-* **No External Data Transfer:** All detection logic runs locally within Atlassian Forge.
-* **No Storage:** We do not store or log the contents of your Jira issues on our own servers.
+Support Email: support@sentientapps.io
 
----
+Official Website: sentientapps.io
 
-## Support
+Bug Reports: Please open an issue on our GitHub Support Repository.
 
-Welcome to PII Shield Support. Please open an [Issue](https://github.com/bandi29/pii-shield-support/issues) to report bugs or security concerns.
-
-For other technical assistance or feature requests, you may also contact our support team:
-
-**Email:** support@sentientapps.io  
-**Website:** [sentientapps.io](https://sentientapps.io)
+© 2026 Sentient Apps. Built for the Atlassian Marketplace.
