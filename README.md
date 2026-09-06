@@ -7,6 +7,28 @@
 ## 🛡️ Overview
 **PII Shield for Jira** automatically detects and redacts Personally Identifiable Information (PII) and secrets from Jira **comments, issue descriptions and fields, and text attachments** — replacing them in place with secure, reversible tokens. It runs **100% natively on Atlassian Forge** and is designed for high-compliance environments (GDPR, CCPA, SOC 2).
 
+## 🎬 Demo Video
+A short walkthrough of PII Shield in action — real-time comment redaction, field & code-block-aware redaction, custom rules, the audit trail, and authorized unmasking:
+
+▶️ **[Watch the demo (MP4)](media/pii-shield-demo.mp4)**
+
+## 📸 Screenshots
+
+**Real-time comment redaction** — sensitive data is replaced with secure tokens and a notice is posted automatically.
+![Real-time comment redaction](media/comment-redaction.png)
+
+**Issue field & description redaction** — PII is tokenized while code blocks are preserved.
+![Field and description redaction](media/field-redaction.png)
+
+**Custom RegEx rules** — define your own organization-specific detection patterns.
+![Custom RegEx rules](media/custom-regex.png)
+
+**Vault Inspector** — authorized admins unmask a token for a compliance investigation; every unmask is audited.
+![Vault Inspector unmasking](media/vault-inspector.png)
+
+**Exportable audit logs** — evidence for SOC 2 and GDPR review.
+![Exportable audit logs](media/audit-logs.png)
+
 ## 🚀 How to Access the App
 Once installed from the Atlassian Marketplace:
 1. **Real-time protection** runs automatically on comments, descriptions, and fields as they are created or updated — no configuration required.
