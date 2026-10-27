@@ -8,26 +8,28 @@
 **PII Shield for Jira** automatically detects and redacts Personally Identifiable Information (PII) and secrets from Jira **issue fields, comments, worklogs, links and text attachments** — replacing them in place with secure, reversible tokens. It runs **100% natively on Atlassian Forge** and is designed for high-compliance environments (GDPR, CCPA, SOC 2).
 
 ## 🎬 Demo Video
-A short walkthrough of PII Shield in action — real-time comment redaction, field & code-block-aware redaction, custom rules, the audit trail, and authorized unmasking (recorded on an earlier version; 3.0.0 adds the features listed under *How it Works*):
+A short walkthrough of PII Shield in action — real-time comment redaction, field & code-block-aware redaction, custom rules, the audit trail, and authorized unmasking (recorded on an earlier version; the screenshots below show version 3.3):
 
 ▶️ **[Watch the demo (MP4)](media/pii-shield-demo.mp4)**
 
 ## 📸 Screenshots
 
-**Real-time comment redaction** — sensitive data is replaced with secure tokens and a notice is posted automatically.
-![Real-time comment redaction](media/comment-redaction.png)
+Taken on version 3.3 with synthetic data.
 
-**Issue field & description redaction** — PII is tokenized while code blocks are preserved.
-![Field and description redaction](media/field-redaction.png)
+**Agent view** — personal data in comments is masked in place within seconds. PII Shield's notice is an internal note, and the panel shows the issue's masking status.
+![Agent view: masked comments, internal notices and the PII Shield panel](media/v3/1-agent-view-masked.png)
 
-**Custom RegEx rules** — define your own organization-specific detection patterns.
-![Custom RegEx rules](media/custom-regex.png)
+**Customer portal** — customers see tokens, never the original values or PII Shield's internal notes.
+![Customer portal showing masked values](media/v3/2-customer-portal.png)
 
-**Vault Inspector** — an admin unmasks a token for a compliance investigation; every unmask is audited.
-![Vault Inspector unmasking](media/vault-inspector.png)
+**Reveal from the issue panel** — agents in allowed groups or project roles reveal a value; every reveal is logged under their name.
+![An agent revealing a masked name from the issue panel](media/v3/3-agent-reveal.png)
 
-**Exportable audit logs** — evidence for SOC 2 and GDPR review.
-![Exportable audit logs](media/audit-logs.png)
+**Settings** — the notice as an internal note, a public comment or off; an allow list for your own domains; and which groups and project roles can reveal.
+![PII Shield settings](media/v3/4-settings.png)
+
+**Audit log** — every redaction, reveal and flag, exportable to CSV for SOC 2 and GDPR evidence.
+![PII Shield audit log](media/v3/5-audit-log.png)
 
 ## 🚀 How to Access the App
 Once installed from the Atlassian Marketplace:
