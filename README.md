@@ -66,22 +66,38 @@ PII Shield is built exclusively on the **Atlassian Forge** platform. The app ope
 
 ### Data Storage & Retention
 * **Stored within Atlassian only** — using Forge Key-Value Store and Forge SQL. No external database.
-* **Encrypted vault:** so that redactions can be reversed by an authorized admin, the original value is encrypted with **AES-256-GCM** and stored as **ciphertext**, keyed to its token. **Plaintext PII is never stored** — only ciphertext, unmaskable solely by an admin with the appropriate role.
+* **Encrypted vault:** so that redactions can be reversed by an authorized admin, the original value is encrypted with **AES-256-GCM** and stored as **ciphertext**, keyed to its token. **Plaintext PII is never stored** — only ciphertext, revealable only by Jira administrators and the groups or project roles an admin allows; every reveal is logged.
 * **Metadata & audit** (redaction counts, and an audit trail of event type, token, issue key, timestamp, and actor) are stored in Forge storage and contain no plaintext PII.
-* **Deletion:** all app data is removed when the app is uninstalled, per Atlassian's Forge data-lifecycle handling.
+* **Deletion:** an issue's stored values are erased when the issue is deleted, and all app data is removed when the app is uninstalled, per Atlassian's Forge data-lifecycle handling.
 
 ### Encryption
 * **In transit:** TLS, within the Atlassian platform.
 * **At rest:** AES-256-GCM for vaulted values, on top of Atlassian's own storage encryption.
 
+### Permissions and data handling
+PII Shield requests only these Jira permissions:
+
+| Permission | Why PII Shield needs it |
+|---|---|
+| Read Jira work (`read:jira-work`) | Read issue fields, comments, worklogs, web links and attachments to find personal data, and receive change events. |
+| Write Jira work (`write:jira-work`) | Write the masked text back, replace an attachment with its masked copy, and add an internal notice. It never deletes issues. |
+| Read Jira users (`read:jira-user`) | Check admin, group and project-role membership before a reveal. |
+| App storage (`storage:app`) | Store encrypted originals, settings, rules, masking status and the audit log, inside Atlassian. |
+| Personal data reporting (`report:personal-data`) | Report account IDs held in the audit log to Atlassian, and erase closed accounts. |
+
+* **No outside calls:** the app declares no external domains, so Forge prevents any data leaving Atlassian.
+* **What is stored:** encrypted originals of masked values, settings (including your allow list), custom rules, masking status, and an audit log of event type, issue, token, time and the acting account ID.
+* **Deletion:** an issue's stored values are erased when the issue is deleted; all app data is deleted when the app is uninstalled.
+* **Known limits:** Jira's issue History and notification emails keep the original text, because they are written before any app can act. PDF and Office files are scanned and flagged but not changed.
+
 ### Vulnerability Reporting
-If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/bandi29/pii-shield-support/issues) or by emailing **apps@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
+If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/bandi29/pii-shield-support/issues) or by emailing **support@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
 
 ---
 
 ## 📞 Support & Feedback
-* **Support Email:** [apps@sentientapps.io](mailto:apps@sentientapps.io)
-* **Marketplace Listing:** [PII Shield for Jira on the Atlassian Marketplace](https://marketplace.atlassian.com/apps/1513204054/pii-shield-for-jira)
+* **Support Email:** [support@sentientapps.io](mailto:support@sentientapps.io)
+* **Marketplace Listing:** [PII Shield – Redaction & Masking for Jira on the Atlassian Marketplace](https://marketplace.atlassian.com/apps/2061532770)
 * **Bug Reports:** open an issue on our [GitHub Support Repository](https://github.com/bandi29/pii-shield-support).
 
 ---
