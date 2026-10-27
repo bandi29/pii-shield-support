@@ -55,8 +55,13 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
   with Atlassian's data-lifecycle handling for Forge apps.
 
 ## 7. Known limits
-Jira's issue History and notification emails keep the original text, because Jira writes them
-before any app can act. PDF and Office attachments are flagged but not changed.
+- Jira's issue History, and the emails Jira sends when an issue is created, commented on or given
+  an attachment, keep the original text, because Jira writes them before any app can act.
+- The App's own masking edits don't send update emails (version 3.1 and later). One exception:
+  Jira can't rename a file, so when a file name holds personal data the App uploads a copy under a
+  masked name and deletes the original, and Jira's update email lists the deleted original by its
+  name. Jira offers apps no way to make that change silently.
+- PDF and Office attachments are flagged but not changed.
 
 ## 8. Contact
 Questions or data requests: **support@sentientapps.io**

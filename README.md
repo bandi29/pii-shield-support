@@ -94,7 +94,10 @@ PII Shield requests only these Jira permissions:
 * **No outside calls:** the app declares no external domains, so Forge prevents any data leaving Atlassian.
 * **What is stored:** encrypted originals of masked values, settings (including your allow list), custom rules, masking status, and an audit log of event type, issue, token, time and the acting account ID.
 * **Deletion:** an issue's stored values are erased when the issue is deleted; all app data is deleted when the app is uninstalled.
-* **Known limits:** Jira's issue History and notification emails keep the original text, because they are written before any app can act. PDF and Office files are scanned and flagged but not changed.
+* **Known limits:**
+  * Jira's issue History, and the emails Jira sends when an issue is created, commented on or given an attachment, keep the original text, because Jira writes them before any app can act.
+  * PII Shield's own masking edits don't send update emails (version 3.1 and later). One exception: Jira can't rename a file, so when a file name holds personal data PII Shield uploads a copy under a masked name and deletes the original, and Jira's update email lists the deleted original by its name. Jira offers apps no way to make that change silently.
+  * PDF and Office files are scanned and flagged but not changed.
 
 ### Vulnerability Reporting
 If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/bandi29/pii-shield-support/issues) or by emailing **support@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
