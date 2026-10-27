@@ -5,10 +5,10 @@
 ---
 
 ## 🛡️ Overview
-**PII Shield for Jira** automatically detects and redacts Personally Identifiable Information (PII) and secrets from Jira **comments, issue descriptions and fields, and text attachments** — replacing them in place with secure, reversible tokens. It runs **100% natively on Atlassian Forge** and is designed for high-compliance environments (GDPR, CCPA, SOC 2).
+**PII Shield for Jira** automatically detects and redacts Personally Identifiable Information (PII) and secrets from Jira **issue fields, comments, worklogs, links and text attachments** — replacing them in place with secure, reversible tokens. It runs **100% natively on Atlassian Forge** and is designed for high-compliance environments (GDPR, CCPA, SOC 2).
 
 ## 🎬 Demo Video
-A short walkthrough of PII Shield in action — real-time comment redaction, field & code-block-aware redaction, custom rules, the audit trail, and authorized unmasking:
+A short walkthrough of PII Shield in action — real-time comment redaction, field & code-block-aware redaction, custom rules, the audit trail, and authorized unmasking (recorded on an earlier version; 3.0.0 adds the features listed under *How it Works*):
 
 ▶️ **[Watch the demo (MP4)](media/pii-shield-demo.mp4)**
 
@@ -23,7 +23,7 @@ A short walkthrough of PII Shield in action — real-time comment redaction, fie
 **Custom RegEx rules** — define your own organization-specific detection patterns.
 ![Custom RegEx rules](media/custom-regex.png)
 
-**Vault Inspector** — authorized admins unmask a token for a compliance investigation; every unmask is audited.
+**Vault Inspector** — an admin unmasks a token for a compliance investigation; every unmask is audited.
 ![Vault Inspector unmasking](media/vault-inspector.png)
 
 **Exportable audit logs** — evidence for SOC 2 and GDPR review.
@@ -31,26 +31,32 @@ A short walkthrough of PII Shield in action — real-time comment redaction, fie
 
 ## 🚀 How to Access the App
 Once installed from the Atlassian Marketplace:
-1. **Real-time protection** runs automatically on comments, descriptions, and fields as they are created or updated — no configuration required.
+1. **Real-time protection** runs automatically on issues, comments, worklogs, links and attachments as they are created or updated — no configuration required. Comments added through the customer portal, email or the API are masked within seconds, without anyone opening the ticket.
 2. **Admin dashboard:** go to **Jira Settings → Apps → PII Shield** to reach the *PII Shield & Vault Dashboard*.
+3. **Issue panel:** each issue shows the masking status (Active, Retrying or Needs attention) and lets permitted agents reveal values.
 
 ## 🛠️ How it Works
-PII Shield scans text in real time and, when it finds sensitive data, encrypts it and replaces it with a token such as `{{PII_EMAIL_2D2D363E}}`. A short notice is posted so the team knows sanitization occurred.
+PII Shield scans text in real time and, when it finds sensitive data, encrypts it and replaces it with a token such as `{{PII_EMAIL_2D2D363E}}`. A short notice is added so the team knows masking occurred — an internal note by default, or a public comment, or no notice (see **Settings**). If a write fails, it is retried automatically.
 
 **Detected out of the box:**
 * **Email addresses**
-* **Credit-card numbers** (Luhn-validated)
+* **Phone numbers**, including international formats
+* **Credit-card numbers** (Luhn-validated) and **US Social Security numbers**
+* **Labelled personal details** — names, postal addresses and dates of birth that follow a label such as `Name:`, `Address:` or `DOB:`
 * **Technical secrets / API keys** — AWS, Stripe, GitHub, Google, Slack, Twilio, SendGrid, npm, and Bearer tokens
 * **Custom patterns** — any regular expression you add under **Custom RegEx**
 
-**Descriptions & fields** are redacted while **code blocks are preserved**, so developer snippets and logs stay intact.
+Values split by formatting (for example, part bold) and full-width or non-Latin digits are still caught.
+
+**Where it masks:** summaries, descriptions, the Environment field, labels, custom fields, request-form answers, comments, worklog comments, web links, attachment file names, link targets and smart links, and text attachments. **PDF and Office attachments** are scanned and flagged when they contain personal data, but not changed. **Code blocks are preserved**, so developer snippets and logs stay intact.
 
 ### Admin Dashboard
 * **Audit Logs** — every redaction, scan, and unmask, exportable to CSV for SOC 2 / GDPR evidence.
 * **Custom RegEx** — add organization-specific patterns (e.g. `EMP-\d{6}`); every match is treated as PII.
 * **Backlog Sweep** — tokenize legacy PII across a project's existing issues.
-* **Vault Inspector** — an authorized admin can unmask a token for an investigation; every unmask is audited.
+* **Vault Inspector** — a Jira admin can unmask a token for an investigation; every unmask is audited.
 * **Stats** — redaction metrics.
+* **Settings** — turn detection types on or off, keep an **allow list** of your own addresses and domains (wildcards supported), choose how the notice is posted, and choose which **groups or project roles** may reveal values in the issue panel.
 
 ---
 

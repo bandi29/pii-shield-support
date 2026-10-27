@@ -1,6 +1,6 @@
 # PII Shield for Jira — Privacy Policy
 
-_Last updated: September 5, 2026_
+_Last updated: October 27, 2026 (app version 3.0.0)_
 
 PII Shield for Jira ("the App"), provided by SentientApps, is built to remove sensitive
 data from Jira **without ever taking custody of it**. The App runs **100% natively on
@@ -8,23 +8,31 @@ Atlassian Forge** and introduces **no external servers, no external databases, a
 third-party subprocessors**.
 
 ## 1. Where processing happens
-All PII detection and redaction runs **inside the Atlassian Forge runtime**. Jira content is
+All PII detection and masking runs **inside the Atlassian Forge runtime**. Jira content is
 processed in memory by the App's Forge functions. The App declares **no external egress** in
 its manifest, and the Forge platform enforces this — so your content **never leaves the
 Atlassian trust boundary** during processing.
+
+The App reads issue summaries, descriptions, the Environment field, labels, custom fields,
+request-form answers, comments, worklog comments, web links, attachment file names and text
+attachments. PDF and Office attachments are scanned only to flag that they contain personal
+data; they are not changed.
 
 ## 2. What is stored, and where
 All App data is stored **within Atlassian**, using native Forge storage — the Forge
 Key-Value Store (`@forge/kvs`) and Forge SQL. **No external database is used.**
 
-- **Encrypted vault.** So that an authorized administrator can reverse a redaction during a
-  compliance investigation, the original detected value is encrypted with **AES-256-GCM** and
-  stored as **ciphertext**, keyed to its redaction token. **Plaintext personal data is never
-  stored** — only ciphertext, which only an administrator with the appropriate role can
-  unmask via the Vault Inspector.
-- **Metadata & audit.** Redaction counts and an audit trail (event type, token, issue key,
-  timestamp, actor) are stored in Forge storage / Forge SQL to provide security metrics and
-  compliance evidence. These records contain **no plaintext personal data**.
+- **Encrypted vault.** So that a masked value can be revealed during an investigation, the
+  original detected value is encrypted with **AES-256-GCM** and stored as **ciphertext**,
+  keyed to its token. **Plaintext personal data is never stored.** Values can be revealed
+  only by Jira administrators and by the groups or project roles an administrator allows;
+  every reveal is logged.
+- **Settings and rules.** Detection settings, your allow list of addresses and domains,
+  custom detection rules, and the masking status of each issue.
+- **Audit log.** Event type, issue, token, time and the Atlassian account ID of the person
+  who acted (for example, who revealed a value). It contains no plaintext masked values.
+
+The App stores no user profile data (names, email addresses or avatars of Jira users).
 
 ## 3. Data in transit
 All traffic is between the App's Forge functions and Atlassian's own APIs, over TLS, inside
@@ -40,12 +48,18 @@ The App uses **no third-party subprocessors** — no external AI services, no ex
 no cloud accounts operated by SentientApps. It relies solely on the Atlassian Forge platform.
 
 ## 6. Data retention & deletion
-Vaulted ciphertext, tokens, settings, and audit records live in the App's Forge storage for
-your site and are removed when the App is uninstalled, in line with Atlassian's data-lifecycle
-handling for Forge apps.
+- **Deleted issues:** when an issue is deleted, its stored values are erased.
+- **Closed accounts:** account IDs in the audit log are reported weekly through Atlassian's
+  personal data reporting API, and the ID of any closed account is erased from the audit log.
+- **Uninstall:** all App data for your site is removed when the App is uninstalled, in line
+  with Atlassian's data-lifecycle handling for Forge apps.
 
-## 7. Contact
-Questions or data requests: **apps@sentientapps.io**
+## 7. Known limits
+Jira's issue History and notification emails keep the original text, because Jira writes them
+before any app can act. PDF and Office attachments are flagged but not changed.
+
+## 8. Contact
+Questions or data requests: **support@sentientapps.io**
 
 ---
 _This document describes the App's data handling for transparency. Organizations should have
