@@ -108,14 +108,14 @@ PII Shield requests only these Jira permissions:
   * PDF and Office files are scanned and flagged but not changed.
 
 ### Vulnerability Reporting
-If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/bandi29/pii-shield-support/issues) or by emailing **support@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
+If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/sentientapps/pii-shield-support/issues) or by emailing **support@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
 
 ---
 
 ## 📞 Support & Feedback
 * **Support Email:** [support@sentientapps.io](mailto:support@sentientapps.io)
 * **Marketplace Listing:** [PII Shield – Redaction & Masking for Jira on the Atlassian Marketplace](https://marketplace.atlassian.com/apps/2061532770)
-* **Bug Reports:** open an issue on our [GitHub Support Repository](https://github.com/bandi29/pii-shield-support).
+* **Bug Reports:** open an issue on our [GitHub Support Repository](https://github.com/sentientapps/pii-shield-support).
 
 ---
 *© 2026 SentientApps. Built for the Atlassian Marketplace.*
