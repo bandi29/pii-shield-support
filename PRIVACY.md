@@ -1,6 +1,6 @@
 # PII Shield for Jira — Privacy Policy
 
-_Last updated: October 27, 2026 (app version 3.0.0)_
+_Last updated: October 28, 2026 (app version 3.3)_
 
 PII Shield for Jira ("the App"), provided by SentientApps, is built to remove sensitive
 data from Jira **without ever taking custody of it**. The App runs **100% natively on
@@ -15,8 +15,8 @@ Atlassian trust boundary** during processing.
 
 The App reads issue summaries, descriptions, the Environment field, labels, custom fields,
 request-form answers, comments, worklog comments, web links, attachment file names and text
-attachments. PDF and Office attachments are scanned only to flag that they contain personal
-data; they are not changed.
+attachments (`.txt`, `.log`, `.csv`, `.json`). PDF and Office attachments (PDF, DOCX, XLSX,
+PPTX) are scanned only to flag that they contain personal data; they are not changed.
 
 ## 2. What is stored, and where
 All App data is stored **within Atlassian**, using native Forge storage — the Forge
@@ -26,13 +26,19 @@ Key-Value Store (`@forge/kvs`) and Forge SQL. **No external database is used.**
   original detected value is encrypted with **AES-256-GCM** and stored as **ciphertext**,
   keyed to its token. **Plaintext personal data is never stored.** Values can be revealed
   only by Jira administrators and by the groups or project roles an administrator allows;
-  every reveal is logged.
-- **Settings and rules.** Detection settings, your allow list of addresses and domains,
-  custom detection rules, and the masking status of each issue.
+  every reveal is logged. Each site has its own 256-bit encryption key, generated on the site
+  when first needed and kept in Forge's secret storage inside Atlassian.
+- **Settings and rules.** Detection settings, your allow list of email addresses and domains,
+  the groups and project roles allowed to reveal values, and custom detection rules.
+- **Operational data.** The masking status of each issue, a list of items that couldn't be
+  masked automatically (for admin review), Backlog Sweep progress, and daily redaction counts
+  by data type. None of these contain the masked values.
 - **Audit log.** Event type, issue, token, time and the Atlassian account ID of the person
-  who acted (for example, who revealed a value). It contains no plaintext masked values.
+  who acted (for example, who revealed a value). It contains no plaintext masked values and is
+  kept until the App is uninstalled.
 
-The App stores no user profile data (names, email addresses or avatars of Jira users).
+The App stores no user profile data (names, email addresses or avatars of Jira users), apart
+from any email addresses an administrator chooses to add to the allow list.
 
 ## 3. Data in transit
 All traffic is between the App's Forge functions and Atlassian's own APIs, over TLS, inside
@@ -48,7 +54,8 @@ The App uses **no third-party subprocessors** — no external AI services, no ex
 no cloud accounts operated by SentientApps. It relies solely on the Atlassian Forge platform.
 
 ## 6. Data retention & deletion
-- **Deleted issues:** when an issue is deleted, its stored values are erased.
+- **Deleted issues:** when an issue is deleted, its stored values are erased. Tokens that were
+  copied into other issues can then no longer be revealed.
 - **Closed accounts:** account IDs in the audit log are reported weekly through Atlassian's
   personal data reporting API, and the ID of any closed account is erased from the audit log.
 - **Uninstall:** all App data for your site is removed when the App is uninstalled, in line
@@ -62,6 +69,7 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
   masked name and deletes the original, and Jira's update email lists the deleted original by its
   name. Jira offers apps no way to make that change silently.
 - PDF and Office attachments are flagged but not changed.
+- Web links fire no Jira event, so they are checked every 5 minutes rather than within seconds.
 
 ## 8. Contact
 Questions or data requests: **support@sentientapps.io**
