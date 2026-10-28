@@ -8,7 +8,7 @@
 **PII Shield for Jira** automatically detects and redacts Personally Identifiable Information (PII) and secrets from Jira **issue fields, comments, worklogs, links and text attachments** — replacing them in place with secure, reversible tokens. It runs **100% natively on Atlassian Forge** and is designed for high-compliance environments (GDPR, CCPA, SOC 2).
 
 ## 🎬 Demo Video
-A 90-second screen recording of version 3.3 with synthetic data: a customer raises a request with personal details, PII Shield masks it within seconds, an agent's internal note is masked with an internal notice, an allowed agent reveals a value, the customer portal shows only tokens, and the admin settings and audit log.
+A 90-second narrated screen recording of version 3.3 with synthetic data: a customer raises a request with personal details, PII Shield masks it within seconds, an agent's internal note is masked with an internal notice, an allowed agent reveals a value, the customer portal shows only tokens, and the admin settings and audit log.
 
 ▶️ **[Watch the demo (MP4)](media/pii-shield-3.3-demo.mp4)**
 
