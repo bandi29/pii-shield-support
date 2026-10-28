@@ -12,6 +12,10 @@ A 90-second narrated screen recording of version 3.3 with synthetic data: a cust
 
 ▶️ **[Watch the demo (MP4)](media/pii-shield-3.3-demo.mp4)**
 
+**Feature tour (3 minutes, narrated)** — everything PII Shield covers, in eight chapters: the service desk (portal requests, internal notes, what customers see); developers (API keys and secrets masked, code blocks left as written); the whole issue (summary, description, labels, Environment, custom fields, request-form answers, worklogs, web links); attachments (text files rewritten, file names masked, PDF and Office files flagged); reveal by group or project role; settings (detection types, notices, allow list, custom rules); cleaning up existing data with a Backlog Sweep; and the admin tools (Vault Inspector, Stats, audit log with CSV export).
+
+▶️ **[Watch the feature tour (MP4)](media/pii-shield-3.3-feature-tour.mp4)**
+
 ## 📸 Screenshots
 
 Taken on version 3.3 with synthetic data.
