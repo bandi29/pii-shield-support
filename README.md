@@ -48,10 +48,11 @@ PII Shield scans text in real time and, when it finds sensitive data, encrypts i
 
 **Detected out of the box:**
 * **Email addresses**
-* **Phone numbers** — international numbers written with a country code (`+44 …`), and common national formats (UK, US, Japan, France, India)
-* **Credit-card numbers** (Luhn-validated, with or without spaces or hyphens) and **US Social Security numbers** (`123-45-6789`)
-* **Labelled personal details** — names, postal addresses and dates of birth that follow a label such as `Name:`, `Customer name:`, `Billing address:`, `DOB:` or `Born on`
+* **Phone numbers** — international numbers written with a country code (`+44 …`); common national formats (UK, US, Japan, France, India); and any number after a label such as `Phone:`, `Mobile:`, `Tel:` or `MSISDN:`, with or without a plus or a leading 0. Optionally, unlabelled numbers written without a plus for the countries you choose (see **Settings**).
+* **Credit-card numbers** (Luhn-validated and matched to a card network's number range and length, with or without spaces or hyphens) and **US Social Security numbers** (`123-45-6789`). An order number or timestamp that happens to pass the Luhn check is not treated as a card.
+* **Labelled personal details** — names, postal addresses and dates of birth that follow a label such as `Name:`, `Customer name:`, `Billing address:`, `DOB:` or `Born on`. Names typed in lower case are caught too (`Name: john smith`), while placeholders such as `Name: unknown` are not.
 * **Technical secrets / API keys** — AWS access keys, Stripe live secret keys, GitHub personal access tokens, Google API keys, Slack tokens, Twilio account SIDs, SendGrid keys, npm tokens and Bearer tokens
+* **IP addresses** (optional, off by default) — public IPv4 and IPv6 addresses; private, internal and documentation ranges are left alone
 * **Custom patterns** — any regular expression you add under **Custom RegEx**
 
 Values split by formatting (for example, part bold) and full-width or non-Latin digits are still caught. To avoid false alarms, numbers next to words such as *version*, *build*, *commit* or *hash* are not treated as card or phone numbers.
@@ -63,15 +64,20 @@ Values split by formatting (for example, part bold) and full-width or non-Latin 
 * **File names** holding personal data are masked — the file is re-uploaded under the masked name (up to 10 MB).
 * **PDF and Office files** (PDF, DOCX, XLSX, PPTX, up to 5 MB) are scanned and flagged with a note when they contain personal data, but not changed.
 
-**Code is preserved:** text in code blocks and inline code is left exactly as written, so developer snippets and logs stay intact.
+**Code blocks and inline code:** API keys and secrets are always masked, even inside code. Personal data inside code is left as written by default, so developer snippets stay readable; turn on **Personal data inside code** in Settings to mask it too, for example when teams paste logs that contain phone numbers.
 
 ### Admin Dashboard
-* **Audit Logs** — every redaction, scan, flag and reveal, filterable by event and exportable to CSV for SOC 2 / GDPR evidence. A banner lists anything from the last 7 days that couldn't be masked automatically, so an admin can review it and mark it as reviewed.
-* **Custom RegEx** — add organization-specific patterns (e.g. `EMP-\d{6}`), up to 50 rules; every match is treated as PII and gets its own token type, such as `{{PII_CUSTOM_EMPLOYEE_ID_…}}`.
+* **Audit Logs** — every redaction, scan, flag and reveal, filterable by event and exportable to CSV for SOC 2 / GDPR evidence. Each entry shows the person's name (the account ID is kept underneath, and the CSV has both). A banner lists anything from the last 7 days that couldn't be masked automatically, so an admin can review it and mark it as reviewed.
+* **Custom RegEx** — add organization-specific patterns (e.g. `EMP-\d{6}`), up to 50 rules; every match is treated as PII and gets its own token type, such as `{{PII_CUSTOM_EMPLOYEE_ID_…}}`. **Test** a pattern against sample text before saving it, **edit** a rule, or turn it off without deleting it. A pattern that is invalid, too long or would match empty text is refused with the reason.
 * **Backlog Sweep** — clean up personal data already in Jira: enter a project key and PII Shield masks the summary, description, custom fields, form answers, comments and worklog comments of the project's issues (the 1,000 most recent per sweep). Text that is already masked is skipped, so a sweep can safely be run again.
 * **Vault Inspector** — a Jira admin can unmask a token for an investigation by entering the token and its issue key; every unmask is audited.
 * **Stats** — redactions today and over the last 30 days, a daily chart and a breakdown by data type, exportable to CSV.
-* **Settings** — turn detection groups on or off (email addresses; government IDs and card numbers; API keys and tokens; phone numbers and labelled personal details), choose how the notice is posted, and choose which **groups or project roles** may reveal values in the issue panel. The **allow list** keeps your own email addresses visible: enter an address or a domain (`acme.com`, `@acme.com` and `*.acme.com` all work, and a domain covers its subdomains).
+* **Settings** — turn detection groups on or off (email addresses; government IDs and card numbers; API keys and tokens; phone numbers and labelled personal details), choose how the notice is posted, and choose which **groups or project roles** may reveal values in the issue panel. Optional settings:
+  * **Public IP addresses** — mask public IPv4 and IPv6 addresses.
+  * **Personal data inside code** — mask personal data in code blocks and inline code too.
+  * **Phone numbers without a plus** — list countries as two-letter codes (for example `AT, GB, TW`) to also mask unlabelled numbers such as `0989800709` or `436641234567`; each is checked against that country's numbering plan.
+  * **Never mask** — regular expressions for text that is never masked, such as your order numbers (`ORD-\d+`); anything detected inside a match is left visible.
+  * **Allow list** — keeps your own email addresses visible: enter an address or a domain. A domain covers all its subdomains, so one entry is enough; `*.acme.com` and `@acme.com` are accepted and saved as `acme.com`.
 
 ### Who can reveal a value
 * **Jira administrators**, plus members of the **groups** and **project roles** chosen in Settings (a role applies only in projects where the person holds it).
@@ -114,10 +120,19 @@ PII Shield requests only these Jira permissions:
 * **No outside calls:** the app declares no external domains, so Forge prevents any data leaving Atlassian.
 * **What is stored:** encrypted originals of masked values, settings (including your allow list and who may reveal), custom rules, masking status, daily redaction counts, and an audit log of event type, issue, token, time and the acting account ID.
 * **Deletion:** an issue's stored values are erased when the issue is deleted (tokens copied into other issues can then no longer be revealed); all app data is deleted when the app is uninstalled.
+* **Logs, analytics and custom metrics:** when an app is installed, Atlassian lets a site admin choose whether to share the app's logs, analytics and custom metrics with its developer. These switches and their defaults belong to Atlassian, not to PII Shield, and PII Shield works fully with all of them off. PII Shield sends no analytics and records no custom metrics. Its logs contain issue keys, comment, worklog and attachment IDs, counts, data types (such as `EMAIL`), masked file names and error codes — never the original values.
 * **Known limits:**
-  * Jira's issue History, and the emails Jira sends when an issue is created, commented on or given an attachment, keep the original text, because Jira writes them before any app can act.
+  * Jira's issue History, and the emails Jira sends when an issue is created, commented on or given an attachment, keep the original text, because Jira writes them before any app can act. See **Jira History and Atlassian AI** below.
   * PII Shield's own masking edits don't send update emails (version 3.1 and later). One exception: Jira can't rename a file, so when a file name holds personal data PII Shield uploads a copy under a masked name and deletes the original, and Jira's update email lists the deleted original by its name. Jira offers apps no way to make that change silently.
   * PDF and Office files are scanned and flagged but not changed.
+
+### Jira History and Atlassian AI
+Jira records every change in the issue's **History** before any app runs, and no app can edit or remove History entries — so the original text of a masked value stays there. A Backlog Sweep doesn't change History either. Anyone who can view the issue can see its History. Atlassian AI features such as Rovo follow Jira's permissions: they show a person only content that person can already view.
+
+Recommendations for sensitive projects:
+* **Limit who can view the issues** — project permissions, or issue security levels for the most sensitive requests.
+* **Keep personal data out at the source** — portal forms and request types that don't ask for it, and agent guidance to attach logs rather than paste them.
+* **Atlassian AI** — if your policy requires that AI features never draw on original values, turn them off for Jira in Atlassian Administration.
 
 ### Vulnerability Reporting
 If you discover a potential vulnerability, please report it via our [Issue Tracker](https://github.com/sentientapps/pii-shield-support/issues) or by emailing **support@sentientapps.io**. We aim to acknowledge security reports within 24 business hours.
