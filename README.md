@@ -62,7 +62,9 @@ Values split by formatting (for example, part bold) and full-width or non-Latin 
 **Attachments:**
 * **Text files** (`.txt`, `.log`, `.csv`, `.json`, up to 2 MB) are rewritten: PII Shield uploads `<name>_redacted.<ext>` and removes the original.
 * **File names** holding personal data are masked — the file is re-uploaded under the masked name (up to 10 MB).
-* **PDF and Office files** (PDF, DOCX, XLSX, PPTX, up to 5 MB) are scanned and flagged with a note when they contain personal data, but not changed.
+* **Word, Excel and PowerPoint files** (DOCX, XLSX, PPTX, up to 5 MB) are rewritten too: PII Shield uploads `<name>_redacted.<ext>` with the values replaced by tokens, including values Word split across formatting, comment authors and email links, and removes the original. A number stored as a number in an Excel cell can't be replaced without breaking the cell, so it stays, and the masked copy is flagged with a note.
+* **PDF files** (up to 5 MB) are scanned and flagged with a note when they contain personal data, but not changed.
+* **Screenshots** (PNG and JPEG, up to 10 MB) are read with text recognition that runs inside Atlassian. By default, an image holding personal data is flagged with a note. With **Screenshots → Black out**, the values in a PNG are covered with black boxes and the file is replaced; the original can't be revealed. Reading is best effort: very small or faint text can be missed.
 
 **Code blocks and inline code:** API keys and secrets are always masked, even inside code. Personal data inside code is left as written by default, so developer snippets stay readable; turn on **Personal data inside code** in Settings to mask it too, for example when teams paste logs that contain phone numbers.
 
@@ -75,6 +77,8 @@ Values split by formatting (for example, part bold) and full-width or non-Latin 
 * **Settings** — turn detection groups on or off (email addresses; government IDs and card numbers; API keys and tokens; phone numbers and labelled personal details), choose how the notice is posted, and choose which **groups or project roles** may reveal values in the issue panel. Optional settings:
   * **Public IP addresses** — mask public IPv4 and IPv6 addresses.
   * **Personal data inside code** — mask personal data in code blocks and inline code too.
+  * **Street addresses without a label** — also mask addresses written without a label, such as `22 Baker Street`, `Baker Lane 22`, `Hauptstraße 5` or `12 rue de la Paix`. Off by default, because it can catch text that only looks like an address.
+  * **Screenshots** — flag images that hold personal data (default), black out the values in PNG screenshots, or don't read images.
   * **Phone numbers without a plus** — list countries as two-letter codes (for example `AT, GB, TW`) to also mask unlabelled numbers such as `0989800709` or `436641234567`. A number is masked only when it is written the way phone numbers are: with the country's domestic trunk prefix (the leading `0`), with `00` and the country code, or as a mobile number in international format. Each is checked against that country's numbering plan, and numbers right after words such as *order*, *ref* or *invoice* are left alone, so reference numbers stay visible.
   * **Customer emails for public comments (preview)** — Jira Service Management emails the customer the moment a public comment is saved, before any app can mask it. With this on, PII Shield emails the customer the masked comment instead, once it is masked. First switch off **Public comment added** under each service project's **Project settings → Customer notifications**, or customers get both emails. The email is sent through Jira's notification API, so it uses Jira's email layout rather than your service desk's, and customers should reply through their request page (the email says so).
   * **Never mask** — regular expressions for text that is never masked, such as your order numbers (`ORD-\d+`); anything detected inside a match is left visible.
@@ -125,7 +129,7 @@ PII Shield requests only these Jira permissions:
 * **Known limits:**
   * Jira's issue History, and the emails Jira sends when an issue is created, commented on or given an attachment, keep the original text, because Jira writes them before any app can act. See **Jira History and Atlassian AI** below. For customer emails about public comments, see the **Customer emails** setting.
   * PII Shield's own masking edits don't send update emails (version 3.1 and later). One exception: Jira can't rename a file, so when a file name holds personal data PII Shield uploads a copy under a masked name and deletes the original, and Jira's update email lists the deleted original by its name. Jira offers apps no way to make that change silently.
-  * PDF and Office files are scanned and flagged but not changed.
+  * PDF files are scanned and flagged but not changed. JPEG screenshots are flagged, not blacked out, and text recognition can miss very small or faint text.
 
 ### Jira History and Atlassian AI
 Jira records every change in the issue's **History** before any app runs, and no app can edit or remove History entries — so the original text of a masked value stays there. A Backlog Sweep doesn't change History either. Anyone who can view the issue can see its History. Atlassian AI features such as Rovo follow Jira's permissions: they show a person only content that person can already view.

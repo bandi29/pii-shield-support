@@ -1,6 +1,6 @@
 # PII Shield for Jira — Privacy Policy
 
-_Last updated: October 30, 2026 (app version 3.5)_
+_Last updated: October 30, 2026 (app version 3.6)_
 
 PII Shield for Jira ("the App"), provided by SentientApps, is built to remove sensitive
 data from Jira **without ever taking custody of it**. The App runs **100% natively on
@@ -15,8 +15,11 @@ Atlassian trust boundary** during processing.
 
 The App reads issue summaries, descriptions, the Environment field, labels, custom fields,
 request-form answers, comments, worklog comments, web links, attachment file names and text
-attachments (`.txt`, `.log`, `.csv`, `.json`). PDF and Office attachments (PDF, DOCX, XLSX,
-PPTX) are scanned only to flag that they contain personal data; they are not changed.
+attachments (`.txt`, `.log`, `.csv`, `.json`), and Word, Excel and PowerPoint attachments (DOCX,
+XLSX, PPTX), which are rewritten with the values masked. PDF attachments are scanned only to flag
+that they contain personal data; they are not changed. The text in image attachments (PNG, JPEG)
+is read by a text-recognition engine bundled in the App and running inside Forge, to flag personal
+data or, if an admin chooses, to black it out.
 
 ## 2. What is stored, and where
 All App data is stored **within Atlassian**, using native Forge storage — the Forge
@@ -88,7 +91,8 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
   Jira can't rename a file, so when a file name holds personal data the App uploads a copy under a
   masked name and deletes the original, and Jira's update email lists the deleted original by its
   name. Jira offers apps no way to make that change silently.
-- PDF and Office attachments are flagged but not changed.
+- PDF attachments are flagged but not changed. JPEG images are flagged, not blacked out, and text
+  recognition can miss very small or faint text.
 - Web links fire no Jira event, so they are checked every 5 minutes rather than within seconds.
 
 ## 9. Contact
