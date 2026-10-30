@@ -1,6 +1,6 @@
 # PII Shield for Jira — Privacy Policy
 
-_Last updated: October 29, 2026 (app version 3.4)_
+_Last updated: October 30, 2026 (app version 3.5)_
 
 PII Shield for Jira ("the App"), provided by SentientApps, is built to remove sensitive
 data from Jira **without ever taking custody of it**. The App runs **100% natively on
@@ -50,20 +50,26 @@ admin choose whether to share the app's logs, analytics and custom metrics with 
 These switches and their defaults belong to Atlassian. The App works fully with all of them off,
 sends no analytics and records no custom metrics.
 
-## 3. Data in transit
+## 3. Emails
+If an administrator turns on **Customer emails for public comments**, the App asks Jira to
+email the request's reporter and participants a public comment after it has been masked. The
+email holds only the masked text and is sent by Jira through its own notification service,
+inside Atlassian; the App never sends email itself.
+
+## 4. Data in transit
 All traffic is between the App's Forge functions and Atlassian's own APIs, over TLS, inside
 Atlassian's network. **No data is transmitted to SentientApps or any third party.**
 
-## 4. Encryption
+## 5. Encryption
 - **In transit:** TLS, within the Atlassian platform.
 - **At rest:** AES-256-GCM for vaulted values, on top of Atlassian's own encryption of Forge
   storage.
 
-## 5. Subprocessors
+## 6. Subprocessors
 The App uses **no third-party subprocessors** — no external AI services, no external APIs, and
 no cloud accounts operated by SentientApps. It relies solely on the Atlassian Forge platform.
 
-## 6. Data retention & deletion
+## 7. Data retention & deletion
 - **Deleted issues:** when an issue is deleted, its stored values are erased. Tokens that were
   copied into other issues can then no longer be revealed.
 - **Closed accounts:** account IDs in the audit log are reported weekly through Atlassian's
@@ -71,10 +77,11 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
 - **Uninstall:** all App data for your site is removed when the App is uninstalled, in line
   with Atlassian's data-lifecycle handling for Forge apps.
 
-## 7. Known limits
+## 8. Known limits
 - Jira's issue History, and the emails Jira sends when an issue is created, commented on or given
-  an attachment, keep the original text, because Jira writes them before any app can act. No app
-  can edit or remove History entries. Atlassian AI features such as Rovo follow Jira's
+  an attachment, keep the original text, because Jira writes them before any app can act (the
+  **Customer emails** setting in section 3 covers public comments). No app can edit or remove
+  History entries. Atlassian AI features such as Rovo follow Jira's
   permissions; an organization that requires AI features never to draw on original values can
   turn them off for Jira in Atlassian Administration.
 - The App's own masking edits don't send update emails (version 3.1 and later). One exception:
@@ -84,7 +91,7 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
 - PDF and Office attachments are flagged but not changed.
 - Web links fire no Jira event, so they are checked every 5 minutes rather than within seconds.
 
-## 8. Contact
+## 9. Contact
 Questions or data requests: **support@sentientapps.io**
 
 ---
