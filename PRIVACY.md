@@ -17,9 +17,11 @@ The App reads issue summaries, descriptions, the Environment field, labels, cust
 request-form answers, comments, worklog comments, web links, attachment file names and text
 attachments (`.txt`, `.log`, `.csv`, `.json`), and Word, Excel and PowerPoint attachments (DOCX,
 XLSX, PPTX), which are rewritten with the values masked. PDF attachments are scanned only to flag
-that they contain personal data; they are not changed. The text in image attachments (PNG, JPEG)
-is read by a text-recognition engine bundled in the App and running inside Forge, to flag personal
-data or, if an admin chooses, to black it out.
+that they contain personal data; they are not changed. The text in images (PNG and JPEG
+attachments, and images inside Office and PDF files) is read by a text-recognition engine bundled
+in the App and running inside Forge, to flag personal data or, if an admin chooses, to black it
+out. Masked copies of images carry no metadata (such as camera details or location), and masked
+Office copies have their author properties emptied.
 
 ## 2. What is stored, and where
 All App data is stored **within Atlassian**, using native Forge storage — the Forge
@@ -91,8 +93,9 @@ no cloud accounts operated by SentientApps. It relies solely on the Atlassian Fo
   Jira can't rename a file, so when a file name holds personal data the App uploads a copy under a
   masked name and deletes the original, and Jira's update email lists the deleted original by its
   name. Jira offers apps no way to make that change silently.
-- PDF attachments are flagged but not changed. JPEG images are flagged, not blacked out, and text
-  recognition can miss very small or faint text.
+- PDF attachments are flagged but not changed. Text recognition can miss very small or faint text.
+  Files over 10 MB, password-protected files and images the App can't read are listed for an
+  admin to review rather than checked.
 - Web links fire no Jira event, so they are checked every 5 minutes rather than within seconds.
 
 ## 9. Contact
